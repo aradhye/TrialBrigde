@@ -1,0 +1,44 @@
+{
+ "peoevv8e96mvc6d7az": {
+  "NCT06036394": {
+   "trial": {
+    "id": "NCT06036394",
+    "title": "Artificial Intelligence in CNS Radiation Oncology",
+    "cond": [
+     "CNS Tumor"
+    ],
+    "status": "Recruiting",
+    "updated": "2025-04-09",
+    "sites": [
+     [
+      "Tata Memorial Hospital",
+      "Mumbai",
+      "India"
+     ]
+    ],
+    "min": 1,
+    "max": null,
+    "sex": "All",
+    "inc": [
+     "Patients with CNS tumors treated with radiation in TMC between January 2010 and December 2022."
+    ],
+    "exc": [
+     "RT treatment outside TMC.",
+     "Radiation planning not done in the treatment planning system (treated using clinical marking/ conventional simulator)."
+    ]
+   },
+   "snapshot": {
+    "status": "Recruiting",
+    "updated": "2025-04-09",
+    "min": 1,
+    "max": null,
+    "sex": "All",
+    "sites": [
+     "Tata Memorial Hospital|Mumbai|India"
+    ],
+    "crit": "cd516f81f4ca0494435a8ae2d12e4ed6"
+   },
+   "savedAt": "2026-10-17T09:26:24.705Z"
+  }
+ }
+}

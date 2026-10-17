@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>TrialBridge</title>
+<style>
+:root{--bg:#f3f6f7;--surface:#fff;--ink:#14282e;--mute:#5b6f75;--line:#d5dfe2;--brand:#0b6e7f;--brand-ink:#fff;--ok:#18794e;--okbg:#e2f4ea;--warn:#9a5b00;--warnbg:#fdf0d8;--bad:#a12a2a;--badbg:#fbe4e4;--chg:#e6eefb;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0f1c20;--surface:#172a30;--ink:#e6f0f2;--mute:#93aab0;--line:#2b4249;--brand:#4fc3d6;--brand-ink:#08262c;--ok:#6fdca4;--okbg:#17382a;--warn:#f0b75a;--warnbg:#3b2d12;--bad:#f19a9a;--badbg:#3d1c1c;--chg:#1c2f4a}}
+:root[data-theme="dark"]{--bg:#0f1c20;--surface:#172a30;--ink:#e6f0f2;--mute:#93aab0;--line:#2b4249;--brand:#4fc3d6;--brand-ink:#08262c;--ok:#6fdca4;--okbg:#17382a;--warn:#f0b75a;--warnbg:#3b2d12;--bad:#f19a9a;--badbg:#3d1c1c;--chg:#1c2f4a}
+*{box-sizing:border-box}html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.55 "Atkinson Hyperlegible","Segoe UI",system-ui,sans-serif}
+h1,h2,h3{font-family:"Fraunces",Georgia,serif;line-height:1.2;margin:0}
+header{padding:28px 20px 8px;max-width:1000px;margin:auto}
+header h1{font-size:clamp(1.9rem,5vw,2.8rem);letter-spacing:-.02em}
+header p{color:var(--mute);margin:6px 0 0;max-width:60ch}
+nav{max-width:1000px;margin:14px auto 0;padding:0 20px;display:flex;gap:6px;border-bottom:1px solid var(--line)}
+nav button{background:none;border:0;border-bottom:3px solid transparent;padding:10px 14px;font:inherit;color:var(--mute);cursor:pointer}
+nav button[aria-selected=true]{color:var(--ink);border-color:var(--brand);font-weight:700}
+main{max-width:1000px;margin:auto;padding:18px 20px 60px}
+.panel{display:none}.panel.on{display:block}
+.search{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:14px}
+label{font-size:.85rem;color:var(--mute);display:flex;flex-direction:column;gap:4px}
+input,select{font:inherit;padding:9px 10px;border:1px solid var(--line);border-radius:6px;background:var(--bg);color:var(--ink);width:100%}
+:focus-visible{outline:3px solid var(--brand);outline-offset:2px}
+.btn{background:var(--brand);color:var(--brand-ink);border:0;border-radius:6px;padding:10px 16px;font:inherit;font-weight:700;cursor:pointer}
+.btn.ghost{background:none;color:var(--brand);border:1px solid var(--brand);padding:6px 12px;font-weight:600}
+.btn.on{background:var(--brand);color:var(--brand-ink)}
+.bar{display:flex;justify-content:space-between;align-items:center;margin:14px 0 8px;color:var(--mute);font-size:.9rem;flex-wrap:wrap;gap:8px}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:16px;margin-bottom:12px}
+.card h3{font-size:1.15rem;margin-bottom:6px}
+.meta{color:var(--mute);font-size:.9rem;display:flex;gap:6px 16px;flex-wrap:wrap}
+.pill{display:inline-block;border-radius:99px;padding:2px 10px;font-size:.8rem;font-weight:700}
+.p-ok{background:var(--okbg);color:var(--ok)}.p-warn{background:var(--warnbg);color:var(--warn)}.p-bad{background:var(--badbg);color:var(--bad)}.p-n{background:var(--chg);color:var(--ink)}
+.row{display:flex;gap:8px;margin-top:12px;flex-wrap:wrap;align-items:center}
+.why{font-size:.88rem;color:var(--mute);margin:8px 0 0}
+.detail{border-left:4px solid var(--brand)}
+.detail h4{margin:16px 0 6px;font-size:1rem}
+.detail ul{margin:0;padding-left:20px}.detail li{margin-bottom:8px}
+.jar{font-weight:700;border-bottom:2px dotted var(--brand)}
+.raw{color:var(--mute);font-size:.82rem;display:block}
+.note{font-size:.82rem;color:var(--mute);background:var(--warnbg);border-radius:8px;padding:10px 12px;margin:12px 0}
+table{width:100%;border-collapse:collapse;font-size:.92rem}th,td{text-align:left;padding:8px 10px;border-bottom:1px solid var(--line);vertical-align:top}th{color:var(--mute);font-weight:600;width:130px}
+.scroll{overflow-x:auto}
+.diff{background:var(--chg);border-radius:6px;padding:8px 10px;margin-top:8px;font-size:.92rem}
+.empty{color:var(--mute);padding:30px 10px;text-align:center}
+#src{font-size:.8rem}.cbar{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;padding:10px 14px;position:sticky;top:env(safe-area-inset-top,0px);z-index:5}tr.dr td,tr.dr th{background:var(--chg)}
+</style>
+</head>
+<body>
+<header>
+<h1>TrialBridge</h1>
+<p>Find clinical trials by condition and place, read the eligibility rules in plain language, compare studies and keep an eye on changes.</p>
+</header>
+<nav role="tablist">
+<button role="tab" aria-selected="true" data-t="find">Find trials</button>
+<button role="tab" aria-selected="false" data-t="cmp">Compare <span id="nc"></span></button>
+<button role="tab" aria-selected="false" data-t="sav">Saved &amp; changes <span id="ns"></span></button>
+</nav>
+<main>
+<section class="panel on" id="find">
+<form class="search" id="f" onsubmit="return false">
+<label>Condition<input id="q" placeholder="e.g. diabetes, asthma" value="diabetes"></label>
+<label>City or country<input id="loc" placeholder="e.g. Delhi, India" value="India"></label>
+<label>Your age<input id="age" type="number" min="0" max="110" placeholder="optional"></label>
+<label>Sex<select id="sex"><option value="">Any</option><option>Female</option><option>Male</option></select></label>
+<label>Status<select id="st"><option value="">Any</option><option value="Recruiting">Recruiting</option><option value="Not yet recruiting">Not yet recruiting</option></select></label>
+<label>&nbsp;<button class="btn" id="go">Search trials</button></label>
+</form>
+<div class="bar"><span id="count"></span><span id="src"></span></div>
+<div id="cbar"></div><div id="out"></div>
+</section>
+<section class="panel" id="cmp"></section>
+<section class="panel" id="sav"></section>
+<p class="note">TrialBridge explains trials; it does not give medical advice or decide eligibility. Always confirm with the study team and your doctor using the official registry page.</p>
+</main>
+<script>
+// ---- Plain-language glossary ----
+const GL=[["myocardial infarction","heart attack"],["renal impairment","kidney problems"],["hepatic impairment","liver problems"],["hepatic and renal function","liver and kidney working well enough"],["hepatic","liver"],["metastatic","spread to other parts of the body"],["metastases","cancer that has spread"],["malignancy","cancer"],["carcinoma","a type of cancer"],["histologically confirmed","confirmed by looking at a tissue sample"],["HbA1c","average blood sugar over ~3 months (HbA1c)"],["eGFR","kidney filtering score (eGFR)"],["OGTT","sugar-drinking blood test (OGTT)"],["albuminuria","protein leaking into urine"],["antihypertensive","blood-pressure"],["hypertension","high blood pressure"],["exacerbations","flare-ups"],["corticosteroids","steroid medicines"],["systemic","taken by mouth or injection"],["Type 2 Diabetes Mellitus \\(T2DM\\)","type 2 diabetes"],["T2DM","type 2 diabetes"],["ICD-10 E11","the medical code for type 2 diabetes"],["gestational diabetes mellitus","diabetes that starts in pregnancy"],["gestation","pregnancy"],["lactation","breastfeeding"],["contraindication","a medical reason not to use"],["ECOG performance status 0 or 1","you are fully active or only slightly limited in daily life"],["MMSE","memory-and-thinking test (MMSE)"],["informant","a family member or friend"],["screening","the first check-up"],["written informed consent","you agree in writing after the study is explained"],["BMI","body mass index (BMI)"],["Impaired glucose tolerance","blood sugar higher than normal but not diabetes"],["Secondary hypertension","blood pressure caused by another illness"]];
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+function plain(t){let h=esc(t),seen=[];GL.forEach(([a,b])=>{const r=new RegExp("\\b"+a.replace(/&/g,"&amp;"),"gi");h=h.replace(r,m=>{seen.push(m);return "\u0001"+b+"\u0002"})});return h.replace(/\u0001([^\u0002]*)\u0002/g,'<span class="jar">$1</span>')}
+// ---- State ----
+let trials=[],cmp=[],saved={};
+let cid="";try{cid=localStorage.getItem("tb_cid")||"";if(!cid){cid=Math.random().toString(36).slice(2)+Date.now().toString(36);localStorage.setItem("tb_cid",cid)}}catch(e){cid="anon"}
+const $=id=>document.getElementById(id);
+const api=async(p,o={})=>{const r=await fetch(p,{...o,headers:{"content-type":"application/json","x-client":cid}});const j=await r.json().catch(()=>({}));if(!r.ok)throw new Error(j.error||"Request failed");return j};
+async function load(q,loc,st){return (await api(`/api/trials?q=${encodeURIComponent(q)}&loc=${encodeURIComponent(loc)}&status=${encodeURIComponent(st)}`)).trials}
+// ---- Fit check (rule-based, age / sex / status only) ----
+function fit(t,age,sex){const why=[];let lvl=0;
+ if(age!==""&&!isNaN(age)){if(t.min!=null&&age<t.min){lvl=2;why.push(`Minimum age is ${t.min}`)}else if(t.max!=null&&age>t.max){lvl=2;why.push(`Maximum age is ${t.max}`)}else why.push("Your age is within the range")}
+ if(sex){if(t.sex!=="All"&&t.sex!==sex){lvl=2;why.push(`Open to ${t.sex.toLowerCase()} participants only`)}else why.push("Sex requirement met")}
+ if(t.exc.length&&lvl<1)lvl=Math.max(lvl,age===""&&!sex?0:1);
+ const lab=age===""&&!sex?["Add age or sex to check fit","p-n"]:lvl===2?["Probably not a fit","p-bad"]:lvl===1?["Check the exclusions","p-warn"]:["Looks possible","p-ok"];
+ return{lab,why}}
+const stCls=s=>s==="Recruiting"?"p-ok":s==="Not yet recruiting"?"p-warn":"p-n";
+const link=t=>`https://clinicaltrials.gov/study/${t.id}`;
+// ---- Render ----
+function card(t,i){const f=fit(t,$("age").value,$("sex").value),inC=cmp.includes(t.id),sv=!!saved[t.id];
+ return `<article class="card" id="c${i}"><h3>${esc(t.title)}</h3>
+ <div class="meta"><span class="pill ${stCls(t.status)}">${esc(t.status)}</span><span class="pill ${f.lab[1]}">${f.lab[0]}</span><span>${esc(t.id)}</span><span>${t.sites.length} site${t.sites.length==1?"":"s"}: ${esc([...new Set(t.sites.map(s=>s[1]).filter(Boolean))].slice(0,3).join(", "))}</span><span>Ages ${t.min??"any"}–${t.max??"any"}</span></div>
+ ${f.why.length?`<p class="why">${esc(f.why.join(" · "))}</p>`:""}
+ <div class="row"><button class="btn" onclick="detail(${i})">Explain eligibility</button><button class="btn ghost ${inC?"on":""}" onclick="tc('${t.id}')">${inC?"Remove from compare":"Add to compare"}</button><button class="btn ghost ${sv?"on":""}" onclick="ts('${t.id}')">${sv?"Saved":"Save"}</button></div><div id="d${i}"></div></article>`}
+function detail(i){const t=trials[i],el=$("d"+i);if(el.innerHTML){el.innerHTML="";return}
+ const li=a=>a.length?a.map(x=>`<li>${plain(x)}<span class="raw">Original: ${esc(x)}</span></li>`).join(""):"<li>Not listed. Check the registry page.</li>";
+ el.innerHTML=`<div class="card detail" style="margin:14px 0 0"><h4>You may be able to join if…</h4><ul>${li(t.inc)}</ul><h4>You may not be able to join if…</h4><ul>${li(t.exc)}</ul>
+ <h4>Where</h4><ul>${t.sites.map(s=>`<li>${esc(s.filter(Boolean).join(", "))}</li>`).join("")}</ul>
+ <div class="row"><button class="btn ghost" onclick="research(${i},this)">Research with TinyFish</button><a href="${link(t)}" target="_blank" rel="noopener">Open official registry record</a></div><div id="r${i}"></div></div>`}
+async function run(){const b=$("go");b.disabled=true;b.textContent="Searching…";$("out").innerHTML="";
+ try{trials=await load($("q").value.trim(),$("loc").value.trim(),$("st").value);draw()}catch(e){trials=[];draw();$("out").innerHTML=`<p class="empty">${esc(e.message)}. Check your connection and try again.</p>`}b.disabled=false;b.textContent="Search trials"}
+function draw(){$("count").textContent=trials.length?`${trials.length} trial${trials.length==1?"":"s"} found`:"";
+ $("src").innerHTML='<span class="pill p-ok">Live data: ClinicalTrials.gov</span>';
+ $("out").innerHTML=trials.length?trials.map(card).join(""):'<p class="empty">No trials matched. Try a broader condition or clear the location.</p>';
+ $("nc").textContent=cmp.length?`(${cmp.length})`:"";cb();$("ns").textContent=Object.keys(saved).length?`(${Object.keys(saved).length})`:""}
+const known=id=>trials.find(t=>t.id===id)||saved[id];
+function tc(id){if(cmp.includes(id))cmp=cmp.filter(x=>x!==id);else if(cmp.length<3){cmp.push(id);cmpStore[id]=trials.find(t=>t.id===id)}else alert("You can compare up to 3 trials.");draw();rc()}
+const cmpStore={};
+async function ts(id){try{if(saved[id]){await api("/api/saved/"+id,{method:"DELETE"});delete saved[id]}else{const t=trials.find(x=>x.id===id)||cmpStore[id];await api("/api/saved",{method:"POST",body:JSON.stringify({trial:t})});saved[id]=true}}catch(e){alert(e.message)}draw();rs()}
+function rc(){const L=cmp.map(id=>cmpStore[id]).filter(Boolean);
+ if(!L.length){$("cmp").innerHTML='<p class="empty">Nothing to compare yet. On the Find trials tab, click “Add to compare” on two or three trials.</p>';return}
+ const A=$("age").value,S=$("sex").value;
+ const R=[["Status",t=>esc(t.status)],["Last updated",t=>esc(t.updated||"—")],["Conditions",t=>esc(t.cond.slice(0,3).join(", ")||"—")],["Age range",t=>`${t.min??"any"}–${t.max??"any"}`],["Sex",t=>esc(t.sex)],["Your fit",t=>fit(t,A,S).lab[0]],["Number of sites",t=>t.sites.length],["Cities",t=>esc([...new Set(t.sites.map(s=>s[1]).filter(Boolean))].slice(0,5).join(", ")||"—")],["You may join if",t=>t.inc.slice(0,4).map(x=>plain(x)).join("<br>")||"—"],["You may not join if",t=>t.exc.slice(0,4).map(x=>plain(x)).join("<br>")||"—"]];
+ $("cmp").innerHTML=(L.length<2?'<p class="note">Add one more trial from the Find trials tab to compare side by side.</p>':'')+`<div class="row"><button class="btn ghost" onclick="cmp=[];draw();rc()">Clear all</button><span class="why">Rows that differ are highlighted.</span></div><div class="scroll"><table><tr><th></th>${L.map(t=>`<td><b>${esc(t.title)}</b><br><span class="raw">${esc(t.id)}</span><div class="row"><a href="${link(t)}" target="_blank" rel="noopener">Registry</a><button class="btn ghost" onclick="tc('${t.id}')">Remove</button></div></td>`).join("")}</tr>${R.map(([k,f])=>{const v=L.map(f);return `<tr class="${new Set(v).size>1?"dr":""}"><th>${k}</th>${v.map(x=>`<td>${x}</td>`).join("")}</tr>`}).join("")}</table></div>`}
+function cb(){$("cbar").innerHTML=cmp.length?`<div class="card cbar"><span>${cmp.length} selected for comparison</span><span class="row" style="margin:0"><button class="btn" onclick="gt('cmp')">View comparison</button><button class="btn ghost" onclick="cmp=[];draw();rc()">Clear</button></span></div>`:""}
+function gt(t){document.querySelector(`nav button[data-t=${t}]`).click()}
+async function rs(){if(!$("sav").classList.contains("on"))return;$("sav").innerHTML='<p class="empty">Checking the registry for changes…</p>';
+ try{const L=(await api("/api/saved?check=1")).items;
+ $("sav").innerHTML=!L.length?'<p class="empty">Save a trial to track it here.</p>':L.map(({trial:t,changes:ch,error})=>`<article class="card"><h3>${esc(t.title)}</h3><div class="meta"><span class="pill ${stCls(t.status)}">${esc(t.status)}</span><span>${esc(t.id)}</span></div>
+ ${error?`<p class="why">Couldn’t check the registry: ${esc(error)}</p>`:ch.length?`<div class="diff"><b>What changed since you last reviewed</b><br>${ch.map(esc).join("<br>")}</div>`:'<p class="why">No changes since your last review.</p>'}
+ <div class="row">${ch.length?`<button class="btn" onclick="ack('${t.id}')">Mark as reviewed</button>`:""}<button class="btn ghost" onclick="ts('${t.id}')">Remove</button></div></article>`).join("")}catch(e){$("sav").innerHTML=`<p class="empty">${esc(e.message)}</p>`}}
+async function ack(id){try{await api("/api/saved/"+id+"/ack",{method:"POST"})}catch(e){alert(e.message)}rs()}
+async function research(i,btn){const t=trials[i],el=$("r"+i);btn.disabled=true;btn.textContent="Researching…";
+ try{const r=await api(`/api/research?id=${t.id}&cond=${encodeURIComponent(t.cond[0]||"")}&title=${encodeURIComponent(t.title)}`),x=r.extracted;
+ el.innerHTML=`<h4>Latest from the web (TinyFish)</h4>${r.results.length?`<ul>${r.results.map(p=>`<li><a href="${esc(p.url)}" target="_blank" rel="noopener">${esc(p.title)}</a><span class="raw">${esc(p.snippet)}</span></li>`).join("")}</ul>`:'<p class="why">No extra sources found.</p>'}${x.contacts.length||x.ids.length||x.status.length?`<h4>Found on those pages</h4><ul>${x.contacts.map(c=>`<li>Contact: ${esc(c)}</li>`).join("")}${x.ids.length?`<li>Study IDs mentioned: ${esc(x.ids.join(", "))}</li>`:""}${x.status.map(s=>`<li>Status hint: ${esc(s)}</li>`).join("")}</ul><p class="why">Extracted automatically from third-party pages. Verify on the official record.</p>`:""}`}
+ catch(e){el.innerHTML=`<p class="note">${esc(e.message)}</p>`}btn.disabled=false;btn.textContent="Research with TinyFish"}
+// ---- Tabs & init ----
+document.querySelectorAll("nav button").forEach(b=>b.onclick=()=>{document.querySelectorAll("nav button").forEach(x=>x.setAttribute("aria-selected",x===b));document.querySelectorAll(".panel").forEach(p=>p.classList.toggle("on",p.id===b.dataset.t));if(b.dataset.t==="cmp")rc();if(b.dataset.t==="sav")rs()});
+$("go").onclick=run;$("f").addEventListener("keydown",e=>{if(e.key==="Enter")run()});
+["age","sex"].forEach(i=>$(i).addEventListener("input",()=>trials.length&&draw()));
+run();rc();api("/api/saved").then(r=>{r.items.forEach(i=>saved[i.trial.id]=true);draw()}).catch(()=>{});
+</script>
+</body>
+</html>
